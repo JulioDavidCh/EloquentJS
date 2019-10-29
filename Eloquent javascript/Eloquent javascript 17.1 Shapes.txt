@@ -1,0 +1,82 @@
+<canvas width="600" height="200"></canvas>
+<script>
+  let cx = document.querySelector("canvas").getContext("2d");
+  
+  function trapezoid(context, base, head, height, scale){
+    let difference = (base - head)/2;
+    context.beginPath();
+    context.moveTo(0, height*scale);
+    context.lineTo(base*scale, height*scale);
+    context.lineTo((base - difference)*scale, 0);
+    context.lineTo(difference*scale, 0);
+    context.closePath();
+    context.stroke();
+  }
+  
+  function diamond(context, side, scale, color){
+    let angle= Math.PI/4;
+    context.save();
+    context.fillStyle = color;
+    context.translate(Math.sqrt(2*(side*side))*scale/2, 0);
+    context.rotate(angle);
+    context.fillRect(0, 0, side*scale, side*scale);
+    context.rotate(-angle);
+    context.restore();
+    context.fillStyle = 'black';
+  }
+  
+  function zigzag(context, height, width, zigs, scale){
+    let sizeDown = ((height/zigs)/2)*scale, count=0;
+    context.beginPath();
+    context.moveTo(0,0);
+    for(let i=0; i<zigs; i++){
+      count+=sizeDown;
+      context.lineTo(width*scale, count*scale);
+      count+=sizeDown;
+      context.lineTo(0, count*scale);
+    }
+    context.stroke();
+  }
+  
+  function spiral(context, radius, circles){
+    let pi = Math.PI;
+    context.beginPath();
+    
+    for(let i=0; i < circles; i++){
+      context.arc(radius, radius/2, radius-((radius/circles)*i), 0, pi);
+      i++;
+      context.arc(radius-(radius/circles), radius/2, radius-((radius/circles)*i), pi, 0);
+    }
+    context.stroke();
+    
+    
+    /*
+    // 6 circles
+    context.arc(radius, radius/2, radius, 0, pi);
+    //center x=100 y=50
+    context.arc(radius-(radius/6), radius/2, radius-(radius/6), pi, 0);
+    //center x= y=50
+    context.arc(radius, radius/2, radius-((radius/6)*2), 0, pi);
+    context.arc(radius-(radius/6), radius/2, radius-((radius/6)*3), pi, 0);
+    context.arc(radius, radius/2, radius-((radius/6)*4), 0, pi);
+    context.arc(radius-(radius/6), radius/2, radius-((radius/6)*5), pi, 0);
+    context.stroke();
+    */
+    
+  }
+  
+  function star(x, y) {
+    let radius = 50, xCenter = x + radius, yCenter = y + radius;
+    cx.beginPath();
+    cx.moveTo(xCenter + radius, yCenter);
+    for (let i = 1; i <= 8; i++) {
+      let angle = i * Math.PI / 4;
+      cx.quadraticCurveTo(xCenter, yCenter,
+                          xCenter + Math.cos(angle) * radius,
+                          yCenter + Math.sin(angle) * radius);
+    }
+    cx.fillStyle = "gold";
+    cx.fill();
+  }
+  star(0, 0);
+</script>

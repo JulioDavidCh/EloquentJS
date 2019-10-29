@@ -1,0 +1,16 @@
+function Promise_all(promises) {
+  return new Promise((resolve, reject) => {
+    if(promises.length == 0) resolve(promises);
+    let fullArray = [],
+        counter = promises.length;
+    
+    for(let i=0; i< promises.length ; i++){
+    	 promises[i]
+      	.then(x => {
+           fullArray[i] = x;
+           counter--;
+           if(counter == 0) resolve(fullArray)})
+      	.catch(reason => reject(new Error(reason)));
+    }
+  });
+}

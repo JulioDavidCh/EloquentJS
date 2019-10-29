@@ -1,0 +1,45 @@
+function improvedRobot({place, parcels}, route) {
+  if (route.length == 0) {
+    let filteredParcels = parcels.filter(x=> x.place == place);
+    if (filteredParcels.length == parcels.length) {
+      let parcelAddresses = filteredParcels.map(x=> x.address);  
+      route = shortestRoute(roadGraph, place, parcelAddresses);
+    } else {
+      let parcelPlaces = parcels.filter(x=> x.place != place);
+      let parcelPlaces2 = parcelPlaces.map(x=> x.place);
+      route = shortestRoute(roadGraph, place, parcelPlaces2);
+    }
+  }
+  return {direction: route[0], memory: route.slice(1)};
+};
+
+function uniqueKeys(array){
+    let newArray=[array[0]];
+    function uniqueKeysHelper(array1,thing){
+    for(let i=0;i<array1.length;i++){
+        if(array1[i]==thing){
+            return array1;
+        }
+    }
+    return array1.concat(thing);
+}
+    if (array.length == 1){
+        return array[0];
+    }
+    for(let i=1;i<array.length;i++){
+       newArray = uniqueKeysHelper(newArray,array[i]);
+    }
+    return newArray;
+};
+
+function shortestRoute(graph, from, to){
+    if(to.length == 1){
+        return findRoute(graph,from, to);
+    }else{
+        let route = findRoute(graph,from,to[0]);
+        for(let place of to){
+             if(route.length > findRoute(graph,from,place).length) route=findRoute(graph,from,place);
+        }
+        return route;
+    }
+};

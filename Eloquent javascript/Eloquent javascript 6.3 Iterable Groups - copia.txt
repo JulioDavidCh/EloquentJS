@@ -1,0 +1,50 @@
+class Group {
+    constructor (){
+        this.group=[];
+    }
+    
+    add(element){
+        if (!this.has(element)) this.group.push(element);
+    }
+    
+    delete(element){
+        if (this.has(element)){
+            this.group=this.group.filter(x=> x!= element);
+            return '${element} deleted from the group'
+        } else {
+            return '${element} was not removed from the group because it is not in the group in the first place';
+        }
+    }
+    
+    has(element){
+        return this.group.indexOf(element)!=-1;
+    }
+    
+    static from(elements){
+        let group = new Group;
+        for (let x of elements){
+            group.add(x);
+        }
+        return group;
+    }
+}
+
+class GroupIterator {
+    constructor(set){
+        this.set=set.group;
+        this.length=set.group.length;
+        this.start=0;
+    }
+    
+    next(){
+        if(this.length<this.start+1) return {done: true};
+        
+        let value = this.set[this.start]; // {value: this.set[this.start]} if object is needed instead of number or value
+        this.start++;
+        return {value, done: false};
+    }
+}
+
+Group.prototype[Symbol.iterator]= function() {
+    return new GroupIterator(this);
+}

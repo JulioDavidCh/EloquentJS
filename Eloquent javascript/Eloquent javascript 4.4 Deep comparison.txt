@@ -1,0 +1,28 @@
+var obj = {here: {is: "an"}, object: 2};
+
+function equalArray(array1 , array2){
+  if(array1 == false && array2 == false){
+      return true;
+  } else if(array1[0] == array2[0]){
+      return equalArray(array1.slice(1) , array2.slice(1));
+  } else {
+      return false;
+  }
+}
+
+function deepEqual(obj1 , obj2){
+    if((typeof(obj1) == "object") && (typeof(obj2) == "object")){
+    let keys1=Object.keys(obj1) , keys2=Object.keys(obj2);
+    if(equalArray(keys1 , keys2)){
+        if(keys1.length == 1){
+           return (obj1[keys1[0]] == obj2[keys1[0]]);
+           } else if(deepEqual(obj1[keys1[0]] , obj2[keys1[0]])){
+           return deepEqual(obj1[keys1[1]] , obj2[keys1[1]]);
+           } else {
+           return false;
+           }
+    }
+  } else{
+      return obj1 == obj2;
+  }
+}

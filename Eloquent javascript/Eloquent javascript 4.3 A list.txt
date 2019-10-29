@@ -1,0 +1,49 @@
+function cons(car,cdr){
+    return {car: car,
+            cdr: cdr};
+}
+
+function arrayToList(array){
+    if(array == false){
+        return null;
+    } else{
+        return cons(array[0], arrayToList(array.slice(1)));
+    }
+}
+
+function listToArray(list){
+    let temp = [];
+    if(list == undefined){
+        return null;
+    } else{
+        temp.push(list.car);
+        return temp.concat(listToArray(list.cdr));
+    }
+}
+
+function prepend(element, list){
+    return {car: element,
+            cdr: list};
+}
+
+function nth(index,list){
+    if(index == 0){
+        return list.car;
+    } else{
+        return nth((index-1),list.cdr);
+    }
+}
+----------------------------------------
+wrong for some reason but makes sense
+
+
+
+function list(...arguments){
+    let temp = arguments[0];
+    if(temp == false){
+        return null;
+    } else{
+        arguments.slice(1);
+        return cons(temp, list(arguments));
+    }
+}

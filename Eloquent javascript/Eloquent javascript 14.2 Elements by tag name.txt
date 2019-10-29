@@ -1,0 +1,22 @@
+<h1>Heading with a <span>span</span> element.</h1>
+<p>A paragraph with <span>one</span>, <span>two</span>
+  spans.</p>
+
+<script>  
+  function byTagName(node, tagName){
+    let foundNodes = [];
+    
+    function helper(node){
+      let childNodes = Array.from(node.childNodes);
+      if (childNodes.length > 0){
+        for(let elm of childNodes){
+          if(elm.nodeType ==  Node.ELEMENT_NODE){
+            if(elm.nodeName.toLowerCase() == tagName) foundNodes.push(elm);
+            helper(elm);
+          }
+        }
+      }
+    }
+    helper(node);
+    return foundNodes;
+  }

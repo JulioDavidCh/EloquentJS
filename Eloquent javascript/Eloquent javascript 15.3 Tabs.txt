@@ -1,0 +1,33 @@
+<tab-panel>
+  <div data-tabname="one">Tab one</div>
+  <div data-tabname="two">Tab two</div>
+  <div data-tabname="three">Tab three</div>
+</tab-panel>
+<script>
+  function asTabs(node) {
+    let childNodes = Array.from(node.childNodes),
+        paragraph = document.createElement("p"),
+        elementNodes = childNodes.filter(node => node.nodeType == Node.ELEMENT_NODE);
+    
+    for(let element of elementNodes){
+      let button = document.createElement("button");
+      element.style.display = "none";
+      button.textContent = element.getAttribute("data-tabname");
+      
+      button.addEventListener("focus", event =>{
+        event.target.style.color = "red";
+        element.style.display = "inline";
+      });
+      
+      button.addEventListener("blur", event =>{
+        event.target.style.color = "";
+        element.style.display = "none";
+      });
+      
+      paragraph.appendChild(button);
+    }
+    node.parentNode.replaceChild(paragraph, node);
+    document.body.appendChild(node);
+  }
+  asTabs(document.querySelector("tab-panel"));
+</script>

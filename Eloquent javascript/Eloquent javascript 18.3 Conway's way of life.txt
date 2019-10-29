@@ -1,0 +1,137 @@
+<div id="grid"></div>
+<button id="next">Next generation</button>
+
+<script>
+  let game = document.querySelector("#grid");
+  let nextTurn = document.querySelector("button");
+  
+  class Cell{
+  
+  constructor(status, x, y){
+    this.alive = status;
+    this.x = x;
+    this.y = y;
+  }
+  
+  static create(status, x, y){
+    return new Cell(status, x, y);
+  }
+  
+}
+
+function statusCase(x){
+  if(x==1) return {x:0, y:-1};
+  if(x==2) return {x:1, y:-1};
+  if(x==3) return {x:1, y:0};
+  if(x==4) return {x:1, y:1};
+  if(x==5) return {x:0, y:1};
+  if(x==6) return {x:-1, y:1};
+  if(x==7) return {x:-1, y:0};
+  if(x==8) return {x:-1, y:-1};
+}
+
+function makeGrid(height, width, chances){
+  let grid =[];
+  for(let y=0; y<height; y++){
+    let row=[];
+    for(let x=0; x<width; x++){
+      row[x]= (Math.random() < chances) ? Cell.create(true, x, y) : 
+      									  Cell.create(false, x, y) ;
+    }
+    grid[y]=row;
+  }
+  return grid;
+}
+
+  
+function updateGrid(grid){
+  let gridHeight = grid.length,
+      gridWidth = grid[0].length,
+      newGrid = [];
+  
+  for(let height=0; height<gridHeight; height++){
+    newGrid[height]=[];
+    for(let width=0; width<gridWidth; width++){
+      let currentCell= grid[height][width];
+      newGrid[height][width] =  currentCell.newStatus(grid);
+    }
+  }
+  return newGrid;
+}
+
+Cell.prototype.newStatus= function(grid){
+    let livingCells = 8;
+    for(let i=1; i<=8; i++){
+      let newCase = statusCase(i);
+      if(grid[(this.y + newCase.y)]) {
+        if(grid[(this.y + newCase.y)][(this.x + newCase.x)]){
+          if(grid[(this.y + newCase.y)][(this.x + newCase.x)].alive) continue;
+        }
+      } 
+      livingCells--;
+    }
+  
+      if(this.alive){
+      if(livingCells == 2 || livingCells == 3) return this;
+      else if(livingCells < 2 || livingCells > 3) return Cell.create(false, this.x, this.y);
+    } else {
+      if(livingCells == 3) return Cell.create(true, this.x, this.y);
+      else return this;
+           } 
+  }
+  
+  function arrayGridToHtml(grid){
+    let game = document.createElement("div");
+    game.setAttribute("id", "game");
+    
+    for(let row of grid){
+      let gridRow = document.createElement("div");
+      for(let element of row){
+        let cell = document.createElement("input");
+        cell.setAttribute("type", "checkbox");
+        if(element.alive) cell.checked = true;
+        gridRow.appendChild(cell);
+      }
+      game.appendChild(gridRow);
+    }
+    return game;
+  }
+  
+  function htmlGridToArray(grid){
+    let game = [],
+        gridHeight = grid.length,
+        gridWidth = Array.from(grid[0].childNodes).length;
+    
+    for(let y=0; y<gridHeight; y++){
+      let arrayRow = [];
+      for(let x=0; x<gridHeight; x++){
+        let cell = Array.from(grid[y].childNodes)[x];
+        if(cell.checked) arrayRow.push(Cell.create(true, x, y));
+        else arrayRow.push(Cell.create(false, x, y));
+      }
+      game.push(arrayRow);
+    }
+    
+    return game;
+  }
+  
+  function domUpdate(gameDiv){
+    let game = Array.from(gameDiv.childNodes[0].childNodes);
+    return console.log(game[0].childNodes);
+  }
+  
+  let grid = makeGrid(8,8, 0.5);
+  
+  game.appendChild(arrayGridToHtml(grid));
+  
+  nextTurn.addEventListener("click", () => {
+    let gameGrid = document.querySelector("#game");
+    let arrayGame = htmlGridToArray(Array.from(gameGrid.childNodes));
+    
+    arrayGame = updateGrid(arrayGame);
+    arrayGame = arrayGridToHtml(arrayGame);
+    
+    game.childNodes[0].remove();
+    game.appendChild(arrayGame);
+  });
+</script>

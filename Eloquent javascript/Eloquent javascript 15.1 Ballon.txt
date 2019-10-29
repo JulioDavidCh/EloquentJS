@@ -1,0 +1,25 @@
+<p>🎈</p>
+
+<script>
+  let ballon = document.querySelector("p");
+  ballon.style.fontSize = 10 + "px";
+  
+  function updateBallon(event){
+    let size = /\d+/.exec(ballon.style.fontSize)[0],
+        newSize;
+    if(event.key == "ArrowUp"){
+      newSize = Math.ceil(size*1.1);
+      ballon.style.fontSize = newSize + "px";
+    } else if(event.key == "ArrowDown"){
+      newSize = Math.max(1, Math.floor(size*0.9));
+      ballon.style.fontSize = newSize + "px";
+    }
+    if (newSize >= 50){
+      ballon.textContent = "💥";
+      window.removeEventListener("keydown", updateBallon);
+    }
+    event.preventDefault();
+  };
+  
+  window.addEventListener("keydown", updateBallon);
+</script>

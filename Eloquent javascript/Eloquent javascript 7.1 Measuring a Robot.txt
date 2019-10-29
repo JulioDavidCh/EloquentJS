@@ -1,0 +1,24 @@
+function compareRobots(robot1, memory1, robot2, memory2) {
+  let robot1SumOfTurns=0,
+      robot2SumOfTurns=0;
+      
+  function runRobot(state, robot, memory) {
+  for (let turn = 0;; turn++) {
+    if (state.parcels.length == 0) {
+      return turn;
+      break;
+    }
+    let action = robot(state, memory);
+    state = state.move(action.direction);
+    memory = action.memory;
+  }
+}
+      for(let i=0; i<99;i++){
+        let state= new VillageState.random;
+        robot1SumOfTurns+=runRobot(state,robot1,[])/100;
+        robot2SumOfTurns+=runRobot(state,robot2,[])/100;
+      }
+      console.log("Robot 1 took in average "+robot1SumOfTurns+" while robot 2 took "+robot2SumOfTurns);
+}
+
+compareRobots(routeRobot, [], goalOrientedRobot, []);

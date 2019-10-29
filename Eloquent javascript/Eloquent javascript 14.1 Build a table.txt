@@ -1,0 +1,97 @@
+<h1>Mountains</h1>
+
+<div id="mountains"></div>
+
+<script>
+  const MOUNTAINS = [
+    {name: "Kilimanjaro", height: 5895, place: "Tanzania"},
+    {name: "Everest", height: 8848, place: "Nepal"},
+    {name: "Mount Fuji", height: 3776, place: "Japan"},
+    {name: "Vaalserberg", height: 323, place: "Netherlands"},
+    {name: "Denali", height: 6168, place: "United States"},
+    {name: "Popocatepetl", height: 5465, place: "Mexico"},
+    {name: "Mont Blanc", height: 4808, place: "Italy/France"}
+  ];
+  
+  function generateObject(obj){
+    let node = document.createElement("tr");
+    for(let elm of Object.keys(obj)){
+      let cell = document.createElement("td");
+      cell.setAttribute("data-mountain", elm);
+      cell.appendChild(document.createTextNode(obj[elm]));
+      node.appendChild(cell);
+    }
+    return node;
+  }
+  
+  function generateTable(obj){
+    let table = document.createElement("table");
+    let headingRow = document.createElement("tr");
+    for(let columnName of Object.keys(obj[0])){
+      let cell = document.createElement("th");
+      cell.appendChild(document.createTextNode(columnName));
+      headingRow.appendChild(cell);
+    }
+    table.appendChild(headingRow);
+    for(let elm of obj){
+      let row = generateObject(elm);
+      table.appendChild(row);
+    }
+    return table;
+  }
+  
+  let divId = document.getElementById("mountains");
+  divId.appendChild(generateTable(MOUNTAINS));
+</script>
+
+
+__________________________________________________
+
+final solution:
+
+<h1>Mountains</h1>
+
+<div id="mountains"></div>
+
+<script>
+  const MOUNTAINS = [
+    {name: "Kilimanjaro", height: 5895, place: "Tanzania"},
+    {name: "Everest", height: 8848, place: "Nepal"},
+    {name: "Mount Fuji", height: 3776, place: "Japan"},
+    {name: "Vaalserberg", height: 323, place: "Netherlands"},
+    {name: "Denali", height: 6168, place: "United States"},
+    {name: "Popocatepetl", height: 5465, place: "Mexico"},
+    {name: "Mont Blanc", height: 4808, place: "Italy/France"}
+  ];
+  
+  function generateObject(obj){
+    let node = document.createElement("tr");
+    for(let elm of Object.keys(obj)){
+      let cell = document.createElement("td");
+      cell.setAttribute("data-mountain", elm);
+      cell.appendChild(document.createTextNode(obj[elm]));
+      if(elm == "height") cell.style.textAlign = "right";
+      node.appendChild(cell);
+    }
+    return node;
+  }
+  
+  function generateTable(obj){
+    let table = document.createElement("table");
+    let headingRow = document.createElement("tr");
+    for(let columnName of Object.keys(obj[0])){
+      let cell = document.createElement("th");
+      cell.appendChild(document.createTextNode(columnName));
+      headingRow.appendChild(cell);
+    }
+    table.appendChild(headingRow);
+    for(let elm of obj){
+      let row = generateObject(elm);
+      table.appendChild(row);
+    }
+    return table;
+  }
+  
+  let divId = document.getElementById("mountains");
+  divId.appendChild(generateTable(MOUNTAINS));
+</script>

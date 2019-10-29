@@ -1,0 +1,15 @@
+function isEven(a){
+    function helper(b){
+        if(b==1){
+            return false;
+        } else if(b==0){
+            return true;
+        }
+        return helper(b-2);
+    }
+    if(a<0){
+        return helper(-a);
+    }else{
+        return helper(a);
+    }
+}

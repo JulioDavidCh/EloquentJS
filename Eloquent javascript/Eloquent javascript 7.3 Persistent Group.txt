@@ -1,0 +1,29 @@
+class PGroup {
+	constructor(element){
+        this.elements = element;
+    }
+  	
+    add(element){
+        if(this.has(element)) return new PGroup(this.elements);
+        else {
+            let newElements = this.elements;
+            newElements.push(element);
+            return new PGroup(newElements);
+        }
+    }
+    
+    delete(element){
+        if(this.has(element)) {
+            let newElements = this.elements.filter(x => x != element);
+            return new PGroup(this.elements);
+        }else{
+            return new PGroup(this.elements);
+        }
+    }
+    
+    has(element){
+        this.elements.indexOf(element) != -1;
+    }
+}
+
+PGroup.empty = new PGroup([]);

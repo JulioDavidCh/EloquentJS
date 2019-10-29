@@ -1,0 +1,26 @@
+<style>body { min-height: 400px}</style>
+<img src="https://www.hispachan.org/assets/countryballs/ve.png" id="cat" style="position: absolute; text-align: center">
+<img src="https://www.hispachan.org/assets/countryballs/ve.png" id="hat" style="position: absolute; text-align: center">
+
+<script>
+  let cat = document.querySelector("#cat");
+  let hat = document.querySelector("#hat");
+
+  let angle = 0;
+  let lastTime = null;
+  function animate(time) {
+    if (lastTime != null) angle += (time - lastTime) * 0.001;
+    lastTime = time;
+    
+    cat.style.top =(Math.sin(angle) * 40 + 40) + "px";
+    cat.style.left =(Math.cos(angle) * 40 + 40) + "px";
+    hat.style.top = 40 + "px";
+    hat.style.left = 40 + "px";
+    
+    //console.log("Y: "+cat.style.top +"\n"+"X: "+cat.style.left)
+    // Your extensions here.
+
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+</script>

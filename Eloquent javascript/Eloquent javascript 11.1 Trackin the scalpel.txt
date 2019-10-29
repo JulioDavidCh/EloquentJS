@@ -1,0 +1,24 @@
+async function locateScalpel(nest){
+  let holder = nest.name;
+  for(;;){
+  let nextNest = await anyStorage(nest, holder, "scalpel");
+    if(holder == nextNest) return holder;
+    else holder = nextNest;
+  }
+}
+
+function locateScalpel2(nest) {
+  function helper(name){
+   return anyStorage(nest,name,"scalpel")
+    .then(next => {
+      if (next == name) return next;
+      return helper(next);
+                  });
+  }
+  return helper(nest.name);
+}
+
+locateScalpel(bigOak).then(console.log);
+locateScalpel2(bigOak).then(console.log);
+// -> Butcher Shop
+// -> Butcher Shop

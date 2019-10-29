@@ -1,0 +1,27 @@
+function countBs(word){
+    const wordLength=word.length;
+    function helper(stringCounter,bCounter){
+        if(stringCounter==wordLength){
+            return bCounter;
+        } else if(word[stringCounter]=='B'){
+            return helper((stringCounter+1),(bCounter+1));
+        } else{
+            return helper((stringCounter+1),bCounter)
+        }
+    }
+    return helper(0,0);
+}
+
+function countChar(word,char){
+    const wordLength=word.length;
+    function helper(stringCounter,counter){
+        if(stringCounter==wordLength){
+            return counter;
+        } else if(word[stringCounter]==char){
+            return helper((stringCounter+1),(counter+1));
+        } else{
+            return helper((stringCounter+1),counter)
+        }
+    }
+    return helper(0,0);
+}

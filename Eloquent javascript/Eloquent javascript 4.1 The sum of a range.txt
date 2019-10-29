@@ -1,0 +1,23 @@
+function range(start, finish, step){
+    let result = [], count = start;
+    if((start < finish) && (step > 0)){
+        while(count<=finish){
+        result.push(count);
+        count+=step;
+        }} else 
+    if((start > finish) && (step < 0)){
+        while(count>=finish){
+        result.push(count);
+        count+=step;
+        }
+    }
+    return result;
+}
+
+function sum(array){
+    let result = 0;
+    for (let index of array){
+    result+=index;
+    }
+    return result;
+}

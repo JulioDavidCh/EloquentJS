@@ -1,0 +1,14 @@
+function loop(start, predicate, updateFunc, body){
+    if(predicate(start)){
+        body(start);
+        return loop(updateFunc(start), predicate, updateFunc, body);
+    }
+}
+
+------------------------------------------------------
+
+loop(3, n => n > 0, n => n - 1, console.log);
+3
+2
+1
+undefined

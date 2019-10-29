@@ -1,0 +1,134 @@
+<div></div>
+<script>
+  const diagonal = {left: {dx: -1, dy: 0}, right: {dx: 1, dy: 0},
+                    up: {dx: 0, dy: -1}, down: {dx: 0, dy: 1}};
+  const adjacent = {right: {up: {dx: 1, dy: -1}, 
+                    		down: {dx: 1, dy: 1}},
+                   left: {down: {dx: -1, dy: 1},
+                          up: {dx: -1, dy: -1}}};
+  // The old draw tool. Rewrite this.
+  function draw(pos, state, dispatch) {
+    let lastLines = [];
+    lastLines.push(pos);
+    
+    function drawPixel({x, y, color}, state) { 
+      let lastPixel = lastLines[0];
+      lineDrawer({x,y}, lastPixel, dispatch, state);
+      lastLines.unshift({x, y, color});
+    }
+    drawPixel(pos, state);
+    return drawPixel;
+  }
+
+  function line(start, state, dispatch) {
+    function drawLine(pos){
+      lineDrawer(pos, start, dispatch, state);
+    }
+    drawLine(start);
+    return drawLine;
+  }
+  
+  function lineDrawer(pos, start, dispatch, state){
+      let diffX = Math.abs(pos.x - start.x),
+          diffY = Math.abs(pos.y - start.y),
+          sizeLine = 0,
+          numberLines = 0;
+      let xDirection = 'none',
+          yDirection = 'none';
+      let diagonalCoordinates = {dx: 0, dy: 0},
+          adjacentCoordinates = {dx: 0, dy: 0};
+      let targetColor = state.color;
+      let drawnLines = [{x: start.x, y: start.y, color: targetColor}];
+      
+      
+      //Gives you an array with the lines 
+      function lines(size, number){
+  		let biggestLine = Math.ceil(size/number);
+  		let smallestLine = Math.floor(size/number);
+  		let currentSize = size;
+  		let lineSet = [];
+  
+  		for(let i = currentSize; i > 0;){
+    	  if(i>biggestLine){
+      		lineSet.push(biggestLine);
+            i-=biggestLine;
+    	  }else {
+       		 lineSet.push(smallestLine);
+       		 i-=smallestLine;
+     	  }
+  		}
+        
+  		if(lineSet.length < number){
+    	   lineSet.shift();
+    	   lineSet.push(smallestLine);
+    	   lineSet.push(smallestLine);
+  		}
+        
+  		return lineSet;
+	  }
+      
+      if(diffX == diffY) {
+        sizeLine = diffX;
+        numberLines = diffY;
+      }
+      else if(diffX < diffY){
+        sizeLine = diffY;
+        numberLines = diffX + 1;
+      }else{
+        sizeLine = diffX;
+        numberLines = diffY + 1;
+      }
+      if(sizeLine == 0) return;
+      
+      if(start.x < pos.x) xDirection = 'right';
+      else xDirection = 'left';
+      if(start.y < pos.y) yDirection = 'down';
+      else yDirection = 'up';
+      
+      
+      if(diffX == 0 || diffY == 0){
+        if(diffX == 0){
+          if(start.y < pos.y) diagonalCoordinates = diagonal['down'];
+          else diagonalCoordinates = diagonal['up'];
+        }else if(start.x < pos.x) diagonalCoordinates = diagonal['right'];
+        else diagonalCoordinates = diagonal['left'];
+      }else if(diffX == diffY){
+        adjacentCoordinates = adjacent[xDirection][yDirection];
+      }else if(diffY < diffX){
+        diagonalCoordinates = diagonal[xDirection];
+        adjacentCoordinates = adjacent[xDirection][yDirection];
+      }else{
+        diagonalCoordinates = diagonal[yDirection];
+        adjacentCoordinates = adjacent[xDirection][yDirection];
+      }
+      
+     let lineSet = lines(sizeLine, numberLines);
+      console.log(
+        sizeLine+": sizeLine\n"+
+        numberLines+": numberLines\n"+
+        lineSet+": lineSet\n"+
+        diagonalCoordinates.dx+ " - "+ diagonalCoordinates.dy +": diagonal\n"+
+        adjacentCoordinates.dx+ " - "+ adjacentCoordinates.dy +": adjacent\n"+
+        "______________________________"
+      );
+      
+      let current = {x: start.x, y: start.y};
+      for(let adj = 0; adj < numberLines; adj++){
+        let lineSize = lineSet[adj];
+        for(let diag = 1; diag < lineSize; diag++){
+          drawnLines.push({x: current.x, y: current.y, color: targetColor});
+          current = {x: current.x + diagonalCoordinates.dx,
+                     y: current.y + diagonalCoordinates.dy};
+        }
+        drawnLines.push({x: current.x, y: current.y, color: targetColor});
+        current = {x: current.x + adjacentCoordinates.dx,
+                   y: current.y + adjacentCoordinates.dy};
+      }
+      dispatch({picture: state.picture.draw(drawnLines)});
+    }
+
+  let dom = startPixelEditor({
+    tools: {draw, line, fill, rectangle, pick}
+  });
+  document.querySelector("div").appendChild(dom);
+</script>

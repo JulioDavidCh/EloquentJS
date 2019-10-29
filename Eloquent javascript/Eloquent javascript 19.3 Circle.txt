@@ -1,0 +1,67 @@
+<div></div>
+<script>
+  const around = [{dx: -1, dy: 0}, {dx: 1, dy: 0},
+                {dx: 0, dy: -1}, {dx: 0, dy: 1}];
+  
+  function circle(start, state, dispatch) {
+    function drawCircle(pos){
+      if(start.x == pos.x &&
+        start.y == pos.y) return;
+      let sideA = start.x - pos.x,
+          sideB = start.y - pos.y;
+      let sideC = Math.floor(Math.sqrt((sideA * sideA) + (sideB * sideB)));
+      let circleOutline = [];
+      let prevX = 0,
+          prevY = 0;
+      
+      //This draws the circle outline _0
+      for(let i=0; i<(Math.PI*2); i+=((Math.PI)/180)){
+        let newX = Math.floor(start.x + (sideC * Math.sin(i)));
+        let newY = Math.floor(start.y + (sideC * Math.cos(i)));
+        if(prevX != newX || prevY != newY){
+          //This has to be done due to js shitty decimal calculations _1
+          if(newX == start.x + sideC) newX = newX - 1;
+          if(newY == start.y + sideC) newY = newY - 1;
+          //End _1
+          prevX = newX;
+          prevY = newY;
+          circleOutline.push({
+            x: newX,
+            y: newY,
+            color: state.color
+          });
+        }
+      }
+      //End _0
+      function getPixel(xPos, yPos, pixelMap){
+      	for(let {x, y, color} of pixelMap){
+      	  if(x == xPos && y == yPos) {return color;};
+      	}	
+      }
+      let circleFill = [{x: start.x, y: start.y, color: state.color}];
+      let targetColor = state.color;
+      if(sideC > 1){
+        for(let i = 0; i<circleFill.length; i++){
+          for(let {dx, dy} of around){
+            let x = circleFill[i].x + dx,
+                y = circleFill[i].y + dy;
+            if(getPixel(x, y, circleOutline) != targetColor &&
+               getPixel(x, y, circleFill) != targetColor){
+              circleFill.push({x, y, color : targetColor});
+          }
+        }
+      }
+        dispatch({picture: state.picture.draw(circleOutline.concat(circleFill))});
+      }else{
+        dispatch({picture: state.picture.draw(circleOutline)});
+      } 
+    }
+    drawCircle(start);
+    return drawCircle;
+  }
+
+  let dom = startPixelEditor({
+    tools: Object.assign({}, baseTools, {circle})
+  });
+  document.querySelector("div").appendChild(dom);
+</script>

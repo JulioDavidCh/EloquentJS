@@ -1,0 +1,35 @@
+// Modify these definitions...
+
+topScope.array = 
+  function (...args){
+  if(args){
+    let newArray = [];
+    for(let i=0; i<args.length; i++){
+      newArray[i] = args[i];
+    }
+    return newArray;
+  }
+};
+
+topScope.length =   
+  function (array){
+  if(array) return array.length;
+};
+
+topScope.element =   
+  function (array, n){
+  if ((n > -1) &&
+     (n <= array.length)) return array[n];
+};
+
+run(`
+do(define(sum, fun(array,
+     do(define(i, 0),
+        define(sum, 0),
+        while(<(i, length(array)),
+          do(define(sum, +(sum, element(array, i))),
+             define(i, +(i, 1)))),
+        sum))),
+   print(sum(array(1, 2, 3))))
+`);
+// -> 6

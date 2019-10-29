@@ -1,0 +1,33 @@
+<canvas width="400" height="400"></canvas>
+<script>
+  let cx = document.querySelector("canvas").getContext("2d");
+  let xCount = Math.random(1), yCount= Math.random(1),
+      xAccumulator = Math.PI/300, yAccumulator = Math.PI/360;
+  let lastTime = null;
+  function frame(time) {
+    if (lastTime != null) {
+      updateAnimation(Math.min(100, time - lastTime) / 1000);
+    }
+    lastTime = time;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  cx.lineWidth= 4;
+  function updateAnimation(step) {
+    cx.beginPath();
+    xCount+=xAccumulator;
+    yCount+=yAccumulator;
+    if(xCount > 1) xAccumulator=-xAccumulator;
+    if(xCount < 0) xAccumulator=-xAccumulator;
+    if(yCount > 1) yAccumulator=-yAccumulator;
+    if(yCount < 0) yAccumulator=-yAccumulator;
+    
+    cx.clearRect(0,0, 340, 340);
+    cx.strokeRect(0,0, 300, 300);
+    cx.arc((290*xCount),
+           (290*yCount), 
+           10, 0, Math.PI*2);
+    cx.fillStyle = 'black';
+    cx.fill();
+  }
+</script>

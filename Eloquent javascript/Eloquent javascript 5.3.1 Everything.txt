@@ -1,0 +1,16 @@
+function newEvery(array, predicate){
+    let length=array.length;
+    if(length==0) return true;
+    else if(predicate(array[0])){
+        return newEvery(array.slice(1), predicate);
+    } else return false;
+}
+
+-----------------------------------------------
+
+newEvery([1, 3, 5], n => n < 10)
+true
+newEvery([2, 4, 16], n => n < 10)
+false
+newEvery([], n => n < 10)
+true
